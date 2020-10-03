@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Feedback.Models.Posts>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .post {
+        color: blue;
+        font-weight: bold;
+        background-color: lightgray;
+    }
+
+    .comment {
+        color: black;
+    }
+</style>
+<br />
+
+<div data-ng-controller="PostController">
+    <div class="row">
+
+        <form name="searchpost">
+            <input class="pull-right" style="margin-right:15px" type="search" required="" id="post" placeholder="Post search" ng-model="post" ng-keyup="search()" />
+            <br />
+        </form>
+        <hr />
+    </div>
+    <table id="datatable" class="table table-striped table-bordered">
+        <thead hidden>
+            <tr>
+                <th>Post</th>
+                <th>User</th>
+                <th>Date</th>
+                <th>Like</th>
+                <th>Dislike</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <tr ng-repeat="repo in data" class="{{repo.class}}">
+                <td>{{repo.IsPost? repo.Post : repo.Comment}}</td>
+                <td>{{repo.User}}</td>
+                <td>{{repo.DateTime | date:'dd/MM/yyyy'}}</td>
+                <td style="text-align:center" ng-if="repo.IsPost" colspan="{{repo.IsPost?2:0}}">{{repo.CommentCount}} Comments</td>
+                <td ng-if="!repo.IsPost"><i class="fa fa-smile-o" style="color:green"></i> {{repo.Like}}</td>
+                <td ng-if="!repo.IsPost"><i class="fa fa-frown-o" style="color:red"></i> {{repo.Dislike}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a {{data.PageIndex-1}} class="btn btn-primary  {{HasPreviousPage}}" ng-click="getData()">Previous</a>
+    <input hidden ng-model="page" min="1" id="page" {{PageIndex}}/>
+    <a {{data.PageIndex+1}} class="btn btn-primary {{HasNextPage}}" ng-click="getData()">Next</a>
+</div>
+@section scripts{
+
+    <script src="~/Js/PostController.js"></script>
+}
